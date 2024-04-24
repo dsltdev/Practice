@@ -1,5 +1,6 @@
 package com.practice.pizzeria.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.practice.pizzeria.persistence.audit.AuditPizzaListener;
 import com.practice.pizzeria.persistence.audit.AuditableEntity;
 import jakarta.persistence.*;
@@ -9,13 +10,15 @@ import lombok.Setter;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @Table(name = "pizza")
 @EntityListeners({AuditingEntityListener.class, AuditPizzaListener.class})
-public class PizzaEntity extends AuditableEntity {
+public class PizzaEntity extends AuditableEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +42,7 @@ public class PizzaEntity extends AuditableEntity {
 
     @Column(nullable = false,columnDefinition = "CHAR(1)")
     private Boolean vegan;
+
 
     @Override
     public String toString() {

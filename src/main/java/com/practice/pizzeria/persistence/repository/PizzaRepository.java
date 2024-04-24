@@ -1,6 +1,7 @@
 package com.practice.pizzeria.persistence.repository;
 
 import com.practice.pizzeria.persistence.entity.PizzaEntity;
+import com.practice.pizzeria.service.dto.updatePizzaPriceDto;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PizzaRepository extends ListCrudRepository<PizzaEntity,Integer> {
-    List<PizzaEntity>findAllByAvailableTrueOrderByPrice();
+   /// List<PizzaEntity>findAllByAvailableTrueOrderByPrice();
     Optional<PizzaEntity> findFirstByAvailableTrueAndNameIgnoreCase(String name);
 
     List<PizzaEntity> findAllByAvailableTrueAndDescriptionContainsIgnoreCase(String description);
@@ -21,9 +22,9 @@ public interface PizzaRepository extends ListCrudRepository<PizzaEntity,Integer>
 
     @Query(value =
              "UPDATE pizza " +
-             " SET price = :newPrice " +
-             " WHERE id_pizza = :idPizza", nativeQuery = true)
+             "SET price = :#{#newPizzaPrice.newPrice } " +
+             "WHERE id_pizza = :#{#newPizzaPrice.pizzaId } ", nativeQuery = true)
     @Modifying
-    void updatePrice (@Param ("idPizza")int idPizza, @Param ("newPrice")int newPrice);
+    void updatePrice (@Param ("newPizzaPrice") updatePizzaPriceDto newPizzaPrice);
 
 }

@@ -2,6 +2,7 @@ package com.practice.pizzeria.controller;
 
 import com.practice.pizzeria.persistence.entity.PizzaEntity;
 import com.practice.pizzeria.service.PizzaService;
+import com.practice.pizzeria.service.dto.updatePizzaPriceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -64,13 +65,7 @@ public class PizzaController {
       return ResponseEntity.badRequest().build();
     }
 
-    @PutMapping
-    public ResponseEntity<PizzaEntity> update (@RequestBody PizzaEntity pizza){
-        if (pizza.getIdPizza() != null && this.pizzaService.exist(pizza.getIdPizza())){
-            return ResponseEntity.ok(this.pizzaService.save(pizza));
-        }
-        return ResponseEntity.badRequest().build();
-    }
+
 
     @DeleteMapping("/{idPizza}")
     public ResponseEntity<Void> delete (@PathVariable int idPizza){
@@ -81,10 +76,27 @@ public class PizzaController {
         return ResponseEntity.badRequest().build();
     }
 
+    @PutMapping
+    public ResponseEntity<PizzaEntity> update (@RequestBody PizzaEntity pizza){
+        if (pizza.getIdPizza() != null && this.pizzaService.exist(pizza.getIdPizza())){
+            return ResponseEntity.ok(this.pizzaService.save(pizza));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/cheapets/{price}")
     public ResponseEntity<List<PizzaEntity>> getWithOut (@PathVariable double price){
         return  ResponseEntity.ok(this.pizzaService.getCheaters(price));
     }
 
+
+    @PutMapping("/update/prices")
+    public ResponseEntity<Void> update (@RequestBody updatePizzaPriceDto dto){
+        if (this.pizzaService.exist(dto.getPizzaId())){
+            this.pizzaService.updatePrice(dto);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
 
 }

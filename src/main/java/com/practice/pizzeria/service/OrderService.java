@@ -1,9 +1,12 @@
 package com.practice.pizzeria.service;
 
 import com.practice.pizzeria.persistence.entity.OrderEntity;
+import com.practice.pizzeria.persistence.projection.OrderSummary;
 import com.practice.pizzeria.persistence.repository.OrderRepository;
+import com.practice.pizzeria.service.dto.RamdomOrderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,5 +44,12 @@ public class OrderService {
     public List<OrderEntity> getCustomerOrders(String idCustomer){
         return this.orderRepository.findCustomerOrders(idCustomer);
     }
+    public OrderSummary getSummary(int orderId){
+        return this.orderRepository.findSumary(orderId);
+    }
 
+    @Transactional
+    public Boolean saveRamdomOrder(RamdomOrderDto ramdomOrderDto){
+    return this.orderRepository.saveRandomOrder(ramdomOrderDto.getIdCustomer(),ramdomOrderDto.getMethod());
+    }
 }
